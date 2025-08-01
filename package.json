@@ -1,0 +1,29 @@
+{
+  "name": "modulo-4-evaluacion-final-bpw-volkiw",
+  "version": "1.0.0",
+  "description": "frases de los simpsons",
+  "main": "src/index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node src/index.js",
+    "dev": "nodemon src/index.js"
+
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Adalab/modulo-4-evaluacion-final-bpw-Volkiw.git"
+  },
+  "author": "Volkiw",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Adalab/modulo-4-evaluacion-final-bpw-Volkiw/issues"
+  },
+  "homepage": "https://github.com/Adalab/modulo-4-evaluacion-final-bpw-Volkiw#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.1",
+    "express": "^5.1.0",
+    "mysql2": "^3.14.3"
+  }
+}
