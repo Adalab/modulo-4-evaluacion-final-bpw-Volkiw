@@ -80,5 +80,15 @@ VALUES ('Sin blanca navidad', 1, 1, '1989-12-17', 'Durante las compras de Navida
  (5,3), 
  (6,3);
 
+INSERT INTO capitulos (titulo, numero_episodio, temporada, fecha_emision, sinopsis)
+VALUES ('Hogar, agridulce hogar', 4, 1, '1990-01-28', 'La familia Simpson va a terapia.'),
+('Bart, el general', 5, 1, '1990-02-04', 'Bart prepara una guerra contra Nelson para defender a Lisa.'),
+('El Blues de la Mona Lisa', 6, 1, '1990-02-11', 'Lisa está triste y se refugia en su música.'),
+('El Abominable Hombre Del Bosque', 7, 1, '1990-02-18', 'Los Simpsons se van de viaje en caravana al bosque.');
 
-
+INSERT INTO frases (texto, marca_tiempo, descripcion, id_personaje, id_capitulo)
+VALUES ('Mi hermano es malo malo, no hace más que chinchar.', '05:14:00', 'Frase de Lisa cantando blues', 4, 6),
+('Pues... ¡que empiece la zampa!', '01:55:50', 'a la hora de la cena en el comedor', 4, 4),
+('Duerme mi niña sobre la rama, cuando la rama se rompa ya, junto a mi niña la cuna caerá', '01:55:50', 'Marge le canta una nana a Maggie', 1, 1),
+('Esto es un vehículo para todo tipo de terreno', '02:24:50', 'conduciendo una caravana en medio del bosque', 2, 7),
+('No te apures, la situación no es tan mala como pudiera parecer, ¿acaso olvidas que soy un experto montañero?', '11:58:32', 'frase de Homer cuando se pierden en el bosque', 2, 7);

@@ -28,6 +28,7 @@ const getConnection = async() => {
     )
 }
 
+//subir una frase nueva
 server.post('/frases', async (req, res) => {
 
     const {texto, marca_tiempo, descripcion, id_personaje, id_capitulo} = req.body;
@@ -37,7 +38,7 @@ server.post('/frases', async (req, res) => {
     const [result] = await connection.query('INSERT INTO frases(texto, marca_tiempo, descripcion, id_personaje, id_capitulo) VALUES (?,?,?,?,?);', [texto, marca_tiempo, descripcion, id_personaje, id_capitulo]);
     await connection.end();
     if (result.length === 0) {
-        return res.status(404).json({error: "frase no encontrada"});
+        return res.status(404).json({error: "información no encontrada"});
     }
     res.status(200).json({
         "success": true,
@@ -50,9 +51,8 @@ server.post('/frases', async (req, res) => {
     }
 });
 
-
+// ver todas las frases
 server.get('/frases', async(req, res) => {
-    console.log("ey")
     try{
         const connection = await getConnection();
         const [result] = await connection.query('SELECT * FROM simpsons.frases');
@@ -66,7 +66,7 @@ server.get('/frases', async(req, res) => {
     }
 }); 
 
-
+//buscar por la id de la frase
 server.get('/frases/:id', async (req, res) => {
     const id = req.params.id;
     try{
@@ -85,7 +85,7 @@ server.get('/frases/:id', async (req, res) => {
     }
 });
 
-
+//modificar por la id de la frase
 server.put('/frases/:id', async (req, res) => {
     const id = req.params.id;
 
@@ -112,6 +112,7 @@ server.put('/frases/:id', async (req, res) => {
     }
 });
 
+//borrar por la id de la frase
 server.delete('/frases/:id', async (req, res) => {
     const id = req.params.id;
 
@@ -130,5 +131,91 @@ server.delete('/frases/:id', async (req, res) => {
     }
 });
 
+// buscar por la id del personaje 
+server.get('/frases/personaje/:id', async (req, res) => {
+    const id = req.params.id;
+    try{
+        const connection = await getConnection();
+        const [result] = await connection.query('SELECT frases.texto as frase, personajes.nombre as personaje, capitulos.titulo as capitulo, capitulos.temporada FROM simpsons.frases INNER JOIN simpsons.personajes ON frases.id_personaje = personajes.id INNER JOIN simpsons.capitulos ON frases.id_capitulo = capitulos.id WHERE id_personaje = ?;', [id]);
+        await connection.end();
+        
+        const name = result[0].personaje;
 
+        if (result.length === 0) {
+            return res.status(404).json({error: "frase no encontrada"});
+        }
+        res.status(200).json({
+            "ID del personaje": id,
+            "personaje": name,
+            result: result
+        });
+    
+    } catch(error){
+        res.status(500).json({error: error});
+    }
+});
 
+// buscar frases por la id del capitulo
+server.get('/frases/capitulo/:id', async (req, res) => {
+    const id = req.params.id;
+    try{
+        const connection = await getConnection();
+        const [result] = await connection.query('SELECT frases.texto as frase, personajes.nombre as personaje, capitulos.titulo as capitulo, capitulos.temporada FROM simpsons.frases INNER JOIN simpsons.personajes ON frases.id_personaje = personajes.id INNER JOIN simpsons.capitulos ON frases.id_capitulo = capitulos.id WHERE id_capitulo = ?;', [id]);
+        await connection.end();
+        if (result.length === 0) {
+            return res.status(404).json({error: "información no encontrada"});
+        }
+        res.status(200).json({
+            "ID del capítulo": id,
+            "frases": result
+        });
+    
+    } catch(error){
+        res.status(500).json({error: error});
+    }
+});
+
+// ver todos los personajes
+server.get('/personajes', async(req, res) => {
+    try{
+        const connection = await getConnection();
+        const [result] = await connection.query('SELECT * FROM simpsons.personajes');
+        await connection.end();
+        res.status(200).json({
+            info: { "count": result.lenght },
+            result: result
+        });
+     } catch(error){
+        res.status(500).json({error: error});
+    }
+});
+
+// ver todos los capitulos
+server.get('/capitulos', async(req, res) => {
+    try{
+        const connection = await getConnection();
+        const [result] = await connection.query('SELECT * FROM simpsons.capitulos');
+        await connection.end();
+        res.status(200).json({
+            info: { "count": result.lenght },
+            result: result
+        });
+     } catch(error){
+        res.status(500).json({error: error});
+    }
+});
+
+// ver las frases, quien las dijo y en qué capítulo
+server.get('/frases/personajes/capitulos', async(req, res) => {
+    try{
+        const connection = await getConnection();
+        const [result] = await connection.query('SELECT frases.texto as frase, personajes.nombre as personaje, capitulos.titulo as capitulo FROM simpsons.frases INNER JOIN simpsons.personajes ON frases.id_personaje = personajes.id INNER JOIN simpsons.capitulos ON frases.id_capitulo = capitulos.id;');
+        await connection.end();
+        res.status(200).json({
+            info: { "count": result.lenght },
+            result: result
+        });
+     } catch(error){
+        res.status(500).json({error: error});
+    }
+});
