@@ -11,6 +11,7 @@ const server = express();
 
 server.use(cors());
 server.use(express.json());
+server.use(cors());
 
 server.listen(port, () => {
     console.log(`servidor escuchando: http://localhost:${port}`);
@@ -209,13 +210,18 @@ server.get('/capitulos', async(req, res) => {
 server.get('/frases/personajes/capitulos', async(req, res) => {
     try{
         const connection = await getConnection();
-        const [result] = await connection.query('SELECT frases.texto as frase, personajes.nombre as personaje, capitulos.titulo as capitulo FROM simpsons.frases INNER JOIN simpsons.personajes ON frases.id_personaje = personajes.id INNER JOIN simpsons.capitulos ON frases.id_capitulo = capitulos.id;');
+        const [result] = await connection.query('SELECT frases.texto as frase, frases.id as frase_id, personajes.nombre as personaje, capitulos.titulo as capitulo FROM simpsons.frases INNER JOIN simpsons.personajes ON frases.id_personaje = personajes.id INNER JOIN simpsons.capitulos ON frases.id_capitulo = capitulos.id;');
         await connection.end();
         res.status(200).json({
-            info: { "count": result.lenght },
             result: result
         });
      } catch(error){
         res.status(500).json({error: error});
     }
 });
+
+
+
+ //servidor estático (Work In Progress)
+const staticServerPath = "./src/web/dist";
+server.use(express.static(staticServerPath));
